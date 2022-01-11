@@ -1,9 +1,9 @@
 const express = require("express");
 require("dotenv").config();
-require("./database/index.db");
-const authRouter = require("./routes/auth.route");
-const adminRouter = require("./admin/route/auth.route");
-const productsRouter = require("./routes/products.route");
+require("./src/database/index.db");
+const authRouter = require("./src/routes/auth.route");
+const adminRouter = require("./src/admin/route/auth.route");
+const productsRouter = require("./src/routes/products.route");
 
 const app = express();
 app.use(express.json());
