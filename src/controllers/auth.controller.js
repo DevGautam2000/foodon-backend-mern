@@ -6,7 +6,7 @@ exports.signup = (req, res) => {
     .exec()
     .then((user) => {
       if (user)
-        return res.status(200).json({
+        return res.status(400).json({
           message: "User already exists.",
         });
 
@@ -16,7 +16,6 @@ exports.signup = (req, res) => {
         lastName,
         email,
         password,
-        userName: Math.random().toString(),
       });
 
       _user

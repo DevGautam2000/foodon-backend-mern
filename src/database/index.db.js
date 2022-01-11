@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { MONGODB, DATABASE } = process.env;
-const mongoURL = `${MONGODB}${DATABASE}`;
+const { MONGODB, MONGODB_ATLAS, DATABASE } = process.env;
+const mongoURL = `${MONGODB_ATLAS}${DATABASE}`;
 
 mongoose.connect(mongoURL, {
   useUnifiedTopology: true,
@@ -16,4 +16,6 @@ db.on("error", () => {
   console.log("db connection failure");
 });
 
-module.exports = db;
+const products = db.collection("products");
+
+module.exports = { db, products };
