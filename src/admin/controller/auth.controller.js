@@ -21,14 +21,14 @@ exports.signup = (req, res) => {
 
       _user
         .save()
-        .then((user) =>
+        .then((_) =>
           res.status(200).json({ message: "Admin created successfully." })
         )
-        .catch((err) =>
+        .catch((_) =>
           res.status(400).json({ message: "Something went wrong." })
         );
     })
-    .catch((err) =>
+    .catch((_) =>
       res.status(400).json({
         messsage: "User not found.",
       })
@@ -62,10 +62,10 @@ exports.signin = (req, res) => {
         res.status(400).json({ message: "Invalid password." });
       }
     })
-    .catch((err) => res.status(400).json({ message: "User not found." }));
+    .catch((_) => res.status(400).json({ message: "User not found." }));
 };
 
-exports.requireSignin = (req, res, next) => {
+exports.requireSignin = (req, _, next) => {
   const token = req.headers.authorization.split(" ")[1];
 
   const _user = jwt.verify(token, process.env.FOODON_SECRET);

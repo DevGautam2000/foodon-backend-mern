@@ -1,6 +1,12 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
+const generateJwtToken = (_id, role) => {
+  return jwt.sign({ _id, role }, process.env.FOODON_SECRET, {
+    expiresIn: "1d",
+  });
+};
+
 exports.signup = (req, res) => {
   User.findOne({ email: req.body.email })
     .exec()
@@ -20,14 +26,20 @@ exports.signup = (req, res) => {
 
       _user
         .save()
-        .then((user) =>
-          res.status(200).json({ message: "User created successfully." })
-        )
-        .catch((err) =>
+        .then((user) => {
+          const token = generateJwtToken(user._id, user.role);
+          const { _id, firstName, lastName, email, role, fullName } = user;
+          return res.status(200).json({
+            token,
+            message: "User created successfully.",
+            user: { _id, firstName, lastName, email, role, fullName },
+          });
+        })
+        .catch((_) =>
           res.status(400).json({ message: "Something went wrong." })
         );
     })
-    .catch((err) =>
+    .catch((_) =>
       res.status(400).json({
         messsage: "User not found.",
       })
@@ -38,7 +50,7 @@ exports.signin = (req, res) => {
   User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
-      if (user.authenticate(req.body.password)) {
+      if (user.authenticate(req.body.password) && user.role === "user") {
         //return a token to start and manage a session
         const token = jwt.sign({ _id: user.id }, process.env.FOODON_SECRET, {
           expiresIn: "1h",
@@ -58,16 +70,8 @@ exports.signin = (req, res) => {
           },
         });
       } else {
-        res.status(400).json({ message: "Invalid password." });
+        res.status(400).json({ message: "Invalid password or username." });
       }
     })
-    .catch((err) => res.status(400).json({ message: "User not found." }));
-};
-
-exports.requireSignin = (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-
-  const _user = jwt.verify(token, process.env.FOODON_SECRET);
-  req.user = _user;
-  next();
+    .catch((_) => res.status(400).json({ message: "User not found." }));
 };

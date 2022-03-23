@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { MONGODB, MONGODB_ATLAS, DATABASE } = process.env;
-const mongoURL = `${MONGODB_ATLAS}${DATABASE}`;
+const mongoURL = `${MONGODB}${DATABASE}`;
 
 mongoose.connect(mongoURL, {
   useUnifiedTopology: true,

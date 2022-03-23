@@ -4,27 +4,19 @@ require("./src/database/index.db");
 const authRouter = require("./src/routes/auth.route");
 const adminRouter = require("./src/admin/route/auth.route");
 const productsRouter = require("./src/routes/products.route");
-
+const cartRouter = require("./src/routes/cart.route");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const port = process.env.PORT || 8080;
 
-// for the CORS middleware in app.
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-app.get("/", (req, res, next) => {
+app.get("/", (_, res) => {
   res.status(200).send("server running at port: " + port);
 });
 
-app.post("/data", (req, res, next) => {
+app.post("/data", (req, res) => {
   const { name } = req.body;
 
   res.status(200).json({
@@ -36,6 +28,7 @@ app.post("/data", (req, res, next) => {
 app.use("/api", authRouter);
 app.use("/api", adminRouter);
 app.use("/api", productsRouter);
+app.use("/api", cartRouter);
 
 app.listen(port, () => {
   console.log("server running at port: " + port);

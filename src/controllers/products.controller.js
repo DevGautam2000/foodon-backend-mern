@@ -1,6 +1,6 @@
-const { db, products } = require("../database/index.db");
+const { products } = require("../database/index.db");
 
-exports.getProducts = (req, res) => {
+exports.getProducts = (_, res) => {
   products
     .find()
     .toArray()
