@@ -10,10 +10,10 @@ const {
   middlewares: { requireSignin },
 } = require("../middlewares/middlewares");
 
-router.post("/user/cart/addtocart", requireSignin, addItemToCart);
+router.post("/add", requireSignin, addItemToCart);
 
-router.post("/user/getCartItems", requireSignin, getCartItems);
+router.post("/get", requireSignin, getCartItems);
 //new update
-router.post("/user/cart/removeItem", requireSignin, removeCartItems);
+router.post("/remove", requireSignin, removeCartItems);
 
 module.exports = router;
